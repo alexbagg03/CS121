@@ -18,7 +18,7 @@ public class Controller {
     ///////////////////////////////////////////
     // MEMBERS
     ///////////////////////////////////////////
-    private static final String crawlStorageFolder = "/Users/Alex/Documents/IntelliJ/CS121/Assignment2/data/crawl/root";
+    private static final String crawlStorageFolder = "/Users/Alex/Documents/GitHub/CS121/CS121/Assignment2/data/crawl/root";
     private static final int numberOfCrawlers = 7;
     private static CrawlController mCrawlController;
     private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851";
