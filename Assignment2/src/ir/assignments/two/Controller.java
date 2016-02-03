@@ -11,6 +11,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
  *
  * Created for CS121 Assignment 2 by:
  * Alex Bagg (80332851)
+ * Vonnie Wu (71785156)
  * <---------------------------------------- ADD YOUR NAME / ID HERE
  */
 public class Controller {
@@ -23,7 +24,7 @@ public class Controller {
     private static final int politenessDelay = 600; // in milliseconds
     private static final int maxDepthOfCrawling = 3;
     private static CrawlController crawlController;
-    private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502";
+    private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502 71785156";
 
 
     ///////////////////////////////////////////
