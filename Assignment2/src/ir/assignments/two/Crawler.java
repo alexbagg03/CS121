@@ -145,6 +145,50 @@ public class Crawler extends WebCrawler {
 		}
 
 	}
+
+	public static ArrayList<String> tokenizeString(String input){
+			ArrayList<String> toReturn = new ArrayList<String>();
+			try {
+				Scanner tokenizer = new Scanner(input).useDelimiter("[^A-Za-z0-9]+");
+				while (tokenizer.hasNext()) {
+					toReturn.add(tokenizer.next().toLowerCase());
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			return toReturn;
+	}
+
+	private static HashMap<String, int> countFrequencies(String input) {
+		ArrayList<String> toReturn = tokenizeString(input);
+		HashMap<String, int> toReturn;
+		for (String toInsert : tokens) {
+			if (toReturn.containsKey(toInsert))
+				toReturn[toInsert] += 1;
+			else
+				toReturn[toInsert] = 1;
+		}
+	}
+
+	private static void getWordInfo(String url, String urlText) {
+		HashMap<String, int> wordFrequencies = countFrequencies(urlText);
+		int wordCount = 0;
+		try	{
+			writer = new BufferedWriter(new FileWriter(url + "TEXT", true));
+			for (Map.entry<string, int> frequency : wordFrequencies.entrySet()) {
+				wordCount += frequency.getValue();
+				writer.write(frequency.getKey() + ", " + frequency.getValue());
+				writer.newLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			writer.close();
+		}
+
+	}
+
 	private static void addSubdomain(String url, int nLinks){
 		BufferedWriter writer = null;
 

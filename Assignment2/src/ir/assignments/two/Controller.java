@@ -11,6 +11,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
  *
  * Created for CS121 Assignment 2 by:
  * Alex Bagg (80332851)
+ * Nick Prendergast (19367502)
  * <---------------------------------------- ADD YOUR NAME / ID HERE
  */
 public class Controller {
