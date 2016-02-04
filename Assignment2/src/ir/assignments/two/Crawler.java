@@ -12,6 +12,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -126,7 +127,6 @@ public class Crawler extends WebCrawler {
 	private static void createSubdomainFile(){
 		subdomainFile = new File(subdomainFileDir, subdomainFileName);
 		BufferedWriter writer = null;
-
 		try {
 			writer = new BufferedWriter(new FileWriter(subdomainFile));
 			writer.write("");
@@ -136,7 +136,9 @@ public class Crawler extends WebCrawler {
 
 		} finally {
 			try {
-				writer.close();
+				if (writer != null) {
+					writer.close();
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -160,26 +162,32 @@ public class Crawler extends WebCrawler {
 			return toReturn;
 	}
 
-	private static HashMap<String, int> countFrequencies(String input) {
-		ArrayList<String> toReturn = tokenizeString(input);
-		HashMap<String, int> toReturn;
-		for (String toInsert : tokens) {
-			if (toReturn.containsKey(toInsert))
-				toReturn[toInsert] += 1;
-			else
-				toReturn[toInsert] = 1;
+	private static HashMap<String, Integer> countFrequencies(String input) {
+		ArrayList<String> tokens = tokenizeString(input);
+		HashMap<String, Integer> tokenFrequencies = new HashMap<String, Integer>();
+		for (String token : tokens) {
+			if (tokenFrequencies.containsKey(token)) {
+				tokenFrequencies.put(token, tokenFrequencies.get(token) + 1);
+			}
+
+			else {
+				tokenFrequencies.put(token, 1);
+			}
 		}
+
+		return tokenFrequencies;
 	}
 
 	private static void getWordInfo(String url, String urlText) {
-		HashMap<String, int> wordFrequencies = countFrequencies(urlText);
-		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "")
+		HashMap<String, Integer> wordFrequencies = countFrequencies(urlText);
+		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "");
 		int wordCount = 0;
+		BufferedWriter writer = null;
 		try	{
 			writer = new BufferedWriter(new FileWriter(url + "TEXT", true));
-			write.write(url);
+			writer.write(url);
 			writer.newLine();
-			for (Map.entry<string, int> frequency : wordFrequencies.entrySet()) {
+			for (Map.Entry<String, Integer> frequency : wordFrequencies.entrySet()) {
 				wordCount += frequency.getValue();
 				writer.write(frequency.getKey() + ", " + frequency.getValue());
 				writer.newLine();
@@ -188,7 +196,16 @@ public class Crawler extends WebCrawler {
 			e.printStackTrace();
 
 		} finally {
-			writer.close();
+			try {
+				if (writer != null) {
+					writer.close();
+				}
+			}
+
+			catch (IOException ioe) {
+				// Do nothing.
+			}
+
 		}
 
 	}
@@ -206,7 +223,9 @@ public class Crawler extends WebCrawler {
 
 		} finally {
 			try {
-				writer.close();
+				if (writer != null) {
+					writer.close();
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
