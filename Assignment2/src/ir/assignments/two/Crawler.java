@@ -187,7 +187,6 @@ public class Crawler extends WebCrawler {
 		}
 
 	}
-
 	/**
 	 * Code referenced for sorting items in a file:
 	 * http://www.avajava.com/tutorials/lessons/how-do-i-alphabetically-sort-the-lines-of-a-file.html%3Bjsess..
@@ -284,7 +283,6 @@ public class Crawler extends WebCrawler {
 		return tokenFrequencies;
 
 	}
-
 	private static void getWordInfo(String url, String urlText) {
 		HashMap<String, Integer> wordFrequencies = countFrequencies(urlText);
 		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "");
