@@ -89,6 +89,7 @@ public class Crawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
+			getWordInfo(url, text);
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("Text length: " + text.length());
@@ -172,9 +173,12 @@ public class Crawler extends WebCrawler {
 
 	private static void getWordInfo(String url, String urlText) {
 		HashMap<String, int> wordFrequencies = countFrequencies(urlText);
+		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "")
 		int wordCount = 0;
 		try	{
 			writer = new BufferedWriter(new FileWriter(url + "TEXT", true));
+			write.write(url);
+			writer.newLine();
 			for (Map.entry<string, int> frequency : wordFrequencies.entrySet()) {
 				wordCount += frequency.getValue();
 				writer.write(frequency.getKey() + ", " + frequency.getValue());
