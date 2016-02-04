@@ -13,7 +13,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
  * Alex Bagg (80332851)
  * Nick Prendergast (19367502)
  * Vonnie Wu (71785156)
- * <---------------------------------------- ADD YOUR NAME / ID HERE
+ * Aaron Lai (93309744)
+ *
  */
 public class Controller {
 
@@ -25,7 +26,7 @@ public class Controller {
     private static final int politenessDelay = 600; // in milliseconds
     private static final int maxPagesToFetch = 4;
     private static CrawlController crawlController;
-    private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502 71785156";
+    private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502 71785156 93309744";
 
 
     ///////////////////////////////////////////
