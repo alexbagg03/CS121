@@ -1,9 +1,11 @@
-http://www.ics.uci.edu/ugrad/sao/index, 99
-<<<<<<< Updated upstream
 http://www.ics.uci.edu/community/news/, 95
-http://www.ics.uci.edu/ugrad/policies/Add_Drop_ChangeOption, 101
-http://www.ics.uci.edu/ugrad/degrees/Second_BA.php, 106
-http://www.ics.uci.edu/ugrad/degrees/Second_BA_SE.php, 99
-http://www.ics.uci.edu/ugrad/degrees/Second_BA_INF.php, 99
-=======
->>>>>>> Stashed changes
+http://www.ics.uci.edu/ugrad/sao/index, 99
+http://www.ics.uci.edu/community/friends/leadershipcouncil/index.php, 87
+http://www.ics.uci.edu/about/equity/, 82
+http://www.ics.uci.edu/ugrad/sao/, 99
+http://www.ics.uci.edu/faculty/highlights/, 94
+http://www.ics.uci.edu/ugrad/sao/index.php, 99
+http://www.ics.uci.edu/community/news/press/view_press?id=122, 97
+http://www.ics.uci.edu/community/news/brenbits/brenbits-winter2016.php, 166
+http://www.ics.uci.edu/community/events/competition/, 92
+http://www.ics.uci.edu/ugrad/resources/index.php, 114
