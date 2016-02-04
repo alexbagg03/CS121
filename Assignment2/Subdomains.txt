@@ -1,6 +1,9 @@
 http://www.ics.uci.edu/ugrad/sao/index, 99
+<<<<<<< Updated upstream
 http://www.ics.uci.edu/community/news/, 95
 http://www.ics.uci.edu/ugrad/policies/Add_Drop_ChangeOption, 101
 http://www.ics.uci.edu/ugrad/degrees/Second_BA.php, 106
 http://www.ics.uci.edu/ugrad/degrees/Second_BA_SE.php, 99
 http://www.ics.uci.edu/ugrad/degrees/Second_BA_INF.php, 99
+=======
+>>>>>>> Stashed changes
