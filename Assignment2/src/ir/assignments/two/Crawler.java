@@ -103,6 +103,7 @@ public class Crawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
+			getWordInfo(url, text);
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("Text length: " + text.length());
@@ -285,18 +286,18 @@ public class Crawler extends WebCrawler {
 	}
 	private static void getWordInfo(String url, String urlText) {
 		HashMap<String, Integer> wordFrequencies = countFrequencies(urlText);
-		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "");
+		String urlString = url.replaceAll("[^A-Za-z ]", "");
 		int wordCount = 0;
-		BufferedWriter writer = null;
+		PrintWriter writer = null;
 		try	{
-			writer = new BufferedWriter(new FileWriter(url + "TEXT", true));
+			writer = new PrintWriter(new FileWriter(urlString + "TEXT", true));
 			writer.write(url);
-			writer.newLine();
+			writer.write("\n");
 			for (Map.Entry<String, Integer> frequency : wordFrequencies.entrySet()) {
 				wordCount += frequency.getValue();
 				writer.write(frequency.getKey() + ", " + frequency.getValue());
-				writer.newLine();
-
+				writer.write("\n");
+				writer.write("##Word Count: " + wordCount);
 			}
 
 		} catch (Exception e) {
@@ -313,7 +314,7 @@ public class Crawler extends WebCrawler {
 					try {
 						writer.close();
 
-					} catch (IOException e1) {
+					} catch (Exception e1) {
 						e1.printStackTrace();
 
 					}

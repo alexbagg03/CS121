@@ -47,7 +47,7 @@ public class Controller {
         config.setPolitenessDelay(politenessDelay);
         config.setUserAgentString(userAgentString);
         //TODO remove when done testing
-        //config.setMaxPagesToFetch(maxPagesToFetch);
+        config.setMaxPagesToFetch(maxPagesToFetch);
         config.setResumableCrawling(false);
 
         PageFetcher pageFetcher = new PageFetcher(config);
