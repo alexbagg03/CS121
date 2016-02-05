@@ -27,7 +27,9 @@ public class Crawler extends WebCrawler {
 	private static final String subdomainFileName = "Subdomains.txt";
 	private static File subdomainFile;
 	private static ArrayList<String> urlCollection;
-
+	private static int uniquePages = 0;
+	
+	
 	/**
 	 * This methods performs a crawl starting at the specified seed URL. Returns a
 	 * collection containing all URLs visited during the crawl.
@@ -85,6 +87,7 @@ public class Crawler extends WebCrawler {
 		String url = page.getWebURL().getURL();
 		System.out.println("URL: " + url);
 		urlCollection.add(url);
+      System.out.println(urlCollection.size() + " urls in Collection. Just added " + url);
 
 		if (page.getParseData() instanceof HtmlParseData) {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -93,17 +96,25 @@ public class Crawler extends WebCrawler {
 			getWordInfo(url, text);
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
+         /*for (String u: urlCollection)
+         {
+            System.out.println(u);
+         }*/
+         
+			/*for (WebURL w: links)
+			{
+				System.out.println(w.getURL());
+				System.out.println("w's doc ID is " + w.getDocid());
+			}*/
+			
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
 
 			if(!url.equals(icsDomain + "/")) {
 				addSubdomain(url, links.size());
-
 			}
-
 		}
-
 	}
 
 	/**
@@ -117,6 +128,7 @@ public class Crawler extends WebCrawler {
 	///////////////////////////////////////////
 	public static void main(String[] args){
 		crawl(icsDomain);
+      System.out.println("Total crawled URLs is " + urlCollection.size());
 
 	}
 
@@ -184,7 +196,7 @@ public class Crawler extends WebCrawler {
 		int wordCount = 0;
 		BufferedWriter writer = null;
 		try	{
-			writer = new BufferedWriter(new FileWriter(url + "TEXT", true));
+			writer = new BufferedWriter(new FileWriter(url+ "TEXT", true));
 			writer.write(url);
 			writer.newLine();
 			for (Map.Entry<String, Integer> frequency : wordFrequencies.entrySet()) {

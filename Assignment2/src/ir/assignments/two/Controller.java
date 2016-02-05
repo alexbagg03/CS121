@@ -23,8 +23,9 @@ public class Controller {
     ///////////////////////////////////////////
     private static final String crawlStorageFolder = "../Assignment2/data/crawl/root";
     private static final int numberOfCrawlers = 7;
-    private static final int politenessDelay = 600; // in milliseconds
-    private static final int maxPagesToFetch = 4;
+    private static final int politenessDelay = 1200; // in milliseconds
+    private static final int maxPagesToFetch = 10;
+    private static final int maxDepthOfCrawling = 3;
     private static CrawlController crawlController;
     private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502 71785156 93309744";
 
@@ -48,6 +49,7 @@ public class Controller {
         config.setPolitenessDelay(politenessDelay);
         config.setUserAgentString(userAgentString);
         //TODO remove when done testing
+       // config.setMaxDepthOfCrawling(maxDepthOfCrawling);
         config.setMaxPagesToFetch(maxPagesToFetch);
         config.setResumableCrawling(false);
 
