@@ -1,6 +1,8 @@
-http://www.ics.uci.edu/ugrad/sao/index, 99
-http://www.ics.uci.edu/community/news/, 95
-http://www.ics.uci.edu/ugrad/policies/Add_Drop_ChangeOption, 101
-http://www.ics.uci.edu/ugrad/degrees/Second_BA.php, 106
-http://www.ics.uci.edu/ugrad/degrees/Second_BA_SE.php, 99
-http://www.ics.uci.edu/ugrad/degrees/Second_BA_INF.php, 99
+http://www.ics.uci.edu/ugrad/courses/index, 82
+http://www.ics.uci.edu/ugrad/courses/, 82
+http://www.ics.uci.edu/about/brenhall/index.php, 84
+http://www.ics.uci.edu/about/about_mission.php, 82
+http://www.ics.uci.edu/grad/funding/index, 94
+http://www.ics.uci.edu/ugrad/policies/Grade_Options, 99
+http://www.ics.uci.edu/grad/degrees/index.php, 105
+http://www.ics.uci.edu/ugrad/courses/index.php, 83

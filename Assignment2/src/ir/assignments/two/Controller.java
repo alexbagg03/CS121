@@ -31,26 +31,29 @@ public class Controller {
 
 
     ///////////////////////////////////////////
-    // CONSTRUCTOR
+    // METHODS
     ///////////////////////////////////////////
     /**
-     * Constructor for the Controller that takes a seed url
-     * to begin crawling with. The crawler configurations are then
-     * set with a storage folder, politeness delay, user agent string,
+     * Takes a seed url to begin crawling with. The crawler configurations
+     * are then set with a storage folder, politeness delay, user agent string,
      * and whether resumable crawling is enabled/disabled. An instance
-     * of the CrawlController is then created and the given seed url
-     * is added to it.
+     * of the CrawlController is then created, the given seed url
+     * is added, and begins the crawl process.
      *
      * @param seed - Initial seed url to begin crawling on
      */
-    public Controller(String seed){
+    public static void start(String seed){
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setPolitenessDelay(politenessDelay);
         config.setUserAgentString(userAgentString);
         //TODO remove when done testing
+<<<<<<< HEAD
        // config.setMaxDepthOfCrawling(maxDepthOfCrawling);
         config.setMaxPagesToFetch(maxPagesToFetch);
+=======
+        //config.setMaxPagesToFetch(maxPagesToFetch);
+>>>>>>> refs/remotes/origin/master
         config.setResumableCrawling(false);
 
         PageFetcher pageFetcher = new PageFetcher(config);
@@ -66,6 +69,7 @@ public class Controller {
              * which are found in these pages
              */
             crawlController.addSeed(seed);
+            crawlController.start(Crawler.class, numberOfCrawlers);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,18 +77,9 @@ public class Controller {
         }
 
     }
-
-
-    ///////////////////////////////////////////
-    // METHODS
-    ///////////////////////////////////////////
-    /**
-     * Starts the crawl with the specific Crawler class and number of crawlers set.
-     * This is a blocking operation, meaning that your code will reach the line after
-     * this only when crawling is finished.
-     */
-    public static void start(){
-        crawlController.start(Crawler.class, numberOfCrawlers);
+    public static void stop(){
+        crawlController.shutdown();
+        crawlController.waitUntilFinish();
 
     }
 

@@ -9,6 +9,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.io.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,11 +26,18 @@ public class Crawler extends WebCrawler {
 	private final static String icsDomain = "http://www.ics.uci.edu";
 	private static final String subdomainFileDir = "../Assignment2";
 	private static final String subdomainFileName = "Subdomains.txt";
+	private static final String crawledDataDir = "../Assignment2/crawledData";
 	private static File subdomainFile;
 	private static ArrayList<String> urlCollection;
+<<<<<<< HEAD
 	private static int uniquePages = 0;
 	
 	
+=======
+	private static ArrayList<String> blackList;
+	private static int idCounter = 1;
+
+>>>>>>> refs/remotes/origin/master
 	/**
 	 * This methods performs a crawl starting at the specified seed URL. Returns a
 	 * collection containing all URLs visited during the crawl.
@@ -37,11 +45,14 @@ public class Crawler extends WebCrawler {
 	 * @param seedURL - Seed URL to crawl
 	 */
 	public static Collection<String> crawl(String seedURL) {
-		Controller controller = new Controller(seedURL);
+		blackList = new ArrayList<String>();
+		blackList.add("duttgroup.ics.uci.edu/");
+		blackList.add("calendar.ics.uci.edu/");
+
 		urlCollection = new ArrayList<String>();
 		createSubdomainFile();
 
-		controller.start();
+		Controller.start(seedURL);
 
 		return urlCollection;
 
@@ -63,6 +74,12 @@ public class Crawler extends WebCrawler {
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+
+		// DO NOT visit URLs that are blacklisted
+		if(blackList.contains(url.toString())){
+			return false;
+
+		}
 
 		// If the robots.txt configuration is enabled and DOES NOT allow the given url
 		// DO NOT visit it
@@ -93,7 +110,6 @@ public class Crawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
-			getWordInfo(url, text);
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
          /*for (String u: urlCollection)
@@ -112,8 +128,17 @@ public class Crawler extends WebCrawler {
 			System.out.println("Number of outgoing links: " + links.size());
 
 			if(!url.equals(icsDomain + "/")) {
+<<<<<<< HEAD
 				addSubdomain(url, links.size());
 			}
+=======
+				addSubdomainToFile(url, links.size());
+
+			}
+
+			savePageDataToDatabase(htmlParseData);
+
+>>>>>>> refs/remotes/origin/master
 		}
 	}
 
@@ -128,13 +153,18 @@ public class Crawler extends WebCrawler {
 	///////////////////////////////////////////
 	public static void main(String[] args){
 		crawl(icsDomain);
+<<<<<<< HEAD
       System.out.println("Total crawled URLs is " + urlCollection.size());
+=======
+		sortSubdomainFile();
+		Controller.stop();
+>>>>>>> refs/remotes/origin/master
 
 	}
 
 
 	///////////////////////////////////////////
-	// METHODS
+	// SUBDOMAIN METHODS
 	///////////////////////////////////////////
 	private static void createSubdomainFile(){
 		subdomainFile = new File(subdomainFileDir, subdomainFileName);
@@ -160,20 +190,109 @@ public class Crawler extends WebCrawler {
 		}
 
 	}
+	private static void addSubdomainToFile(String url, int nLinks){
+		BufferedWriter writer = null;
 
-	public static ArrayList<String> tokenizeString(String input){
-			ArrayList<String> toReturn = new ArrayList<String>();
+		try {
+			writer = new BufferedWriter(new FileWriter(subdomainFile, true));
+			writer.write(url + ", " + nLinks);
+			writer.newLine();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
 			try {
-				Scanner tokenizer = new Scanner(input).useDelimiter("[^A-Za-z0-9]+");
-				while (tokenizer.hasNext()) {
-					toReturn.add(tokenizer.next().toLowerCase());
-				}
+				writer.close();
+
 			} catch (Exception e) {
-				System.out.println(e);
+				e.printStackTrace();
+
 			}
-			return toReturn;
+
+		}
+
+	}
+	/**
+	 * Code referenced for sorting items in a file:
+	 * http://www.avajava.com/tutorials/lessons/how-do-i-alphabetically-sort-the-lines-of-a-file.html%3Bjsess..
+	 */
+	private static void sortSubdomainFile() {
+		FileReader fileReader = null;
+		ArrayList<String> subdomainList = new ArrayList<String>();
+
+		try {
+			fileReader = new FileReader(subdomainFileName);
+
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				subdomainList.add(line);
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				fileReader.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+
+			}
+
+		}
+
+		Collections.sort(subdomainList, SubdomainComparator);
+
+		createSubdomainFile();
+
+		BufferedWriter writer = null;
+
+		try {
+			writer = new BufferedWriter(new FileWriter(subdomainFileName, true));
+
+			for (String subdomain : subdomainList) {
+				writer.write(subdomain);
+				writer.newLine();
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				writer.close();
+
+			} catch (Exception e){
+				e.printStackTrace();
+
+			}
+
+		}
+
 	}
 
+
+	///////////////////////////////////////////
+	// FREQUENCY METHODS
+	///////////////////////////////////////////
+	public static ArrayList<String> tokenizeString(String input){
+		ArrayList<String> toReturn = new ArrayList<String>();
+		try {
+			Scanner tokenizer = new Scanner(input).useDelimiter("[^A-Za-z0-9]+");
+			while (tokenizer.hasNext()) {
+				toReturn.add(tokenizer.next().toLowerCase());
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return toReturn;
+	}
 	private static HashMap<String, Integer> countFrequencies(String input) {
 		ArrayList<String> tokens = tokenizeString(input);
 		HashMap<String, Integer> tokenFrequencies = new HashMap<String, Integer>();
@@ -188,8 +307,8 @@ public class Crawler extends WebCrawler {
 		}
 
 		return tokenFrequencies;
-	}
 
+	}
 	private static void getWordInfo(String url, String urlText) {
 		HashMap<String, Integer> wordFrequencies = countFrequencies(urlText);
 		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "");
@@ -203,32 +322,52 @@ public class Crawler extends WebCrawler {
 				wordCount += frequency.getValue();
 				writer.write(frequency.getKey() + ", " + frequency.getValue());
 				writer.newLine();
+
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
 			try {
-				if (writer != null) {
-					writer.close();
-				}
-			}
+				writer.close();
 
-			catch (IOException ioe) {
-				// Do nothing.
+			} catch (Exception e) {
+				e.printStackTrace();
+
+				if (writer != null) {
+					try {
+						writer.close();
+
+					} catch (IOException e1) {
+						e1.printStackTrace();
+
+					}
+
+				}
+
 			}
 
 		}
 
 	}
 
-	private static void addSubdomain(String url, int nLinks){
+
+	///////////////////////////////////////////
+	// CRAWLED DATA METHODS
+	///////////////////////////////////////////
+	private static void savePageDataToDatabase(HtmlParseData parseData){
+		String text = parseData.getText();
+		String html = parseData.getHtml();
+
+		File pageFile = new File(crawledDataDir, String.valueOf(idCounter++));
 		BufferedWriter writer = null;
 
 		try {
-			writer = new BufferedWriter(new FileWriter(subdomainFile, true));
-			writer.write(url + ", " + nLinks);
+			writer = new BufferedWriter(new FileWriter(pageFile));
+			writer.write(html);
 			writer.newLine();
+			writer.write(text);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -247,5 +386,18 @@ public class Crawler extends WebCrawler {
 		}
 
 	}
+
+
+	///////////////////////////////////////////
+	// SUBDOMAIN COMPARATOR
+	///////////////////////////////////////////
+	private static Comparator<String> SubdomainComparator = new Comparator<String>() {
+		@Override
+		public int compare(String sd1, String sd2) {
+			return sd1.toLowerCase().compareTo(sd2.toLowerCase());
+
+		}
+
+	};
 
 }
