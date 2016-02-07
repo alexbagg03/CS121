@@ -32,6 +32,24 @@ public class Crawler extends WebCrawler {
 	private static ArrayList<String> blackList;
 	private static int idCounter = 1;
 
+	private static class PageWordCountPair {
+		private final Page page;
+		private final int wordCount;
+
+		public PageWordCountPair(Page page, int wordCount) {
+			this.page = page;
+			this.wordCount = wordCount;
+		}
+
+		public Page getPage() {
+			return page;
+		}
+
+		public int getWordCount() {
+			return wordCount;
+		}
+	}
+
 	/**
 	 * This methods performs a crawl starting at the specified seed URL. Returns a
 	 * collection containing all URLs visited during the crawl.
@@ -104,6 +122,16 @@ public class Crawler extends WebCrawler {
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
 			getWordInfo(url, text);
+			Set<WebURL> links = htmlParseData.getOutgoingUrls();
+
+			if (longestPage == null) {
+				longestPage = new PageWordCountPair(page, wordCount);
+			}
+
+			else if (wordCount > longestPage.wordCount) {
+				longestPage = new PageWordCountPair(page, wordCount);
+			}
+
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("Text length: " + text.length());
@@ -284,7 +312,7 @@ public class Crawler extends WebCrawler {
 		return tokenFrequencies;
 
 	}
-	private static void getWordInfo(String url, String urlText) {
+	private static int getWordInfo(String url, String urlText) {
 		HashMap<String, Integer> wordFrequencies = countFrequencies(urlText);
 		String urlString = url.replaceAll("[^A-Za-z ]", "");
 		int wordCount = 0;
@@ -322,9 +350,9 @@ public class Crawler extends WebCrawler {
 				}
 
 			}
-
 		}
 
+		return wordCount;
 	}
 
 
