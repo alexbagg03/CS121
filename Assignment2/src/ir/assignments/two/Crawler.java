@@ -1,12 +1,8 @@
 package ir.assignments.two;
 
-import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
-import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 import java.io.*;
@@ -22,15 +18,18 @@ public class Crawler extends WebCrawler {
 	///////////////////////////////////////////
 	// MEMBERS
 	///////////////////////////////////////////
-	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg" + "|png|mp3|mp3|zip|gz))$");
+	private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg" + "|png|mp3|mp3|zip|gz|wmv|pdf))$");
 	private final static String icsDomain = "http://www.ics.uci.edu";
-	private static final String subdomainFileDir = "../Assignment2";
+	private static final String subdomainFileDir = "./Assignment2/";
 	private static final String subdomainFileName = "Subdomains.txt";
-	private static final String crawledDataDir = "../Assignment2/crawledData";
+	private static final String crawledDataDir = "./Assignment2/crawledData";
+	private static final String wordDir = "./Assignment2/words/";
 	private static File subdomainFile;
 	private static ArrayList<String> urlCollection;
 	private static ArrayList<String> blackList;
 	private static int idCounter = 1;
+	private static PageWordCountPair longestPage = null;
+	private static int wordCount = 0;
 
 	private static class PageWordCountPair {
 		private final Page page;
@@ -82,25 +81,16 @@ public class Crawler extends WebCrawler {
 	 */
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		CrawlConfig config = new CrawlConfig();
-		PageFetcher pageFetcher = new PageFetcher(config);
-		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-
 		// DO NOT visit URLs that are blacklisted
-		if(blackList.contains(url.toString())){
-			return false;
+		for (String toAvoid: blackList) {
+			if (url.toString().contains(toAvoid)) {
+				return false;
+			}
 
-		}
-
-		// If the robots.txt configuration is enabled and DOES NOT allow the given url
-		// DO NOT visit it
-		if(robotstxtConfig.isEnabled() && !robotstxtServer.allows(url)){
-			return false;
 		}
 
 		String href = url.getURL().toLowerCase();
-		return !FILTERS.matcher(href).matches() && href.startsWith(icsDomain);
+		return !FILTERS.matcher(href).matches() && href.contains("ics.uci.edu");
 	}
 
 	/**
@@ -121,7 +111,7 @@ public class Crawler extends WebCrawler {
 			HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
 			String text = htmlParseData.getText();
 			String html = htmlParseData.getHtml();
-			getWordInfo(url, text);
+			wordCount = getWordInfo(url, text);
 			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			if (longestPage == null) {
@@ -132,13 +122,11 @@ public class Crawler extends WebCrawler {
 				longestPage = new PageWordCountPair(page, wordCount);
 			}
 
-			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
 			System.out.println("Number of outgoing links: " + links.size());
-
-			if(!url.equals(icsDomain + "/")) {
+			if(url.contains("ics.uci.edu")) {
 				addSubdomainToFile(url, links.size());
 
 			}
@@ -153,7 +141,7 @@ public class Crawler extends WebCrawler {
 	 * Main function for running the crawler on the ICS domain.
 	 * This is primarily used for testing.
 	 *
-	 * @param args
+	 * @param args Main function. Expects no args.
      */
 	///////////////////////////////////////////
 	// MAIN FUNCTION
@@ -193,6 +181,13 @@ public class Crawler extends WebCrawler {
 		}
 
 	}
+
+	/**
+	 * Adds the given url and the number of outgoing links found
+	 * to the Subdomains file.
+	 * @param url String representing the URL
+	 * @param nLinks Int representing the number of outgoing links found
+     */
 	private static void addSubdomainToFile(String url, int nLinks){
 		BufferedWriter writer = null;
 
@@ -225,7 +220,7 @@ public class Crawler extends WebCrawler {
 		ArrayList<String> subdomainList = new ArrayList<String>();
 
 		try {
-			fileReader = new FileReader(subdomainFileName);
+			fileReader = new FileReader(subdomainFile);
 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -240,7 +235,8 @@ public class Crawler extends WebCrawler {
 
 		} finally {
 			try {
-				fileReader.close();
+				if(fileReader != null)
+					fileReader.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -269,7 +265,8 @@ public class Crawler extends WebCrawler {
 
 		} finally {
 			try {
-				writer.close();
+				if(writer != null)
+					writer.close();
 
 			} catch (Exception e){
 				e.printStackTrace();
@@ -284,6 +281,13 @@ public class Crawler extends WebCrawler {
 	///////////////////////////////////////////
 	// FREQUENCY METHODS
 	///////////////////////////////////////////
+
+	/**
+	 * This method is used to tokenize the strings of text into alphanumeric groups.
+	 * In this case the url.getText() output.
+	 * @param input The string that needs to be tokenized
+	 * @return ArrayList<String> The list of tokens found.
+     */
 	public static ArrayList<String> tokenizeString(String input){
 		ArrayList<String> toReturn = new ArrayList<String>();
 		try {
@@ -296,6 +300,13 @@ public class Crawler extends WebCrawler {
 		}
 		return toReturn;
 	}
+
+	/**
+	 * This method takes a string and returns a HashMap of String, Integer
+	 * entries the represent the words and their occurrences in the string.
+	 * @param input String
+	 * @return HashMap<String, Integer>
+     */
 	private static HashMap<String, Integer> countFrequencies(String input) {
 		ArrayList<String> tokens = tokenizeString(input);
 		HashMap<String, Integer> tokenFrequencies = new HashMap<String, Integer>();
@@ -312,42 +323,41 @@ public class Crawler extends WebCrawler {
 		return tokenFrequencies;
 
 	}
+
+	/**
+	 * This function generates a word frequency file for the given url
+	 * and writes it to a file for later processing.
+	 *
+	 * @param url String representing the url
+	 * @param urlText The text of the URL (No HTML
+     * @return int The total words found in the urlText
+     */
 	private static int getWordInfo(String url, String urlText) {
 		HashMap<String, Integer> wordFrequencies = countFrequencies(urlText);
-		String urlString = url.replaceAll("[^A-Za-z ]", "");
+		String urlString = url.replaceAll("[^A-Za-z0-9 ]", "");
 		int wordCount = 0;
 		PrintWriter writer = null;
 		try	{
-			writer = new PrintWriter(new FileWriter(urlString + "TEXT", true));
+			writer = new PrintWriter(new FileWriter(wordDir + urlString + "TEXT.txt", true));
 			writer.write(url);
 			writer.write("\n");
 			for (Map.Entry<String, Integer> frequency : wordFrequencies.entrySet()) {
 				wordCount += frequency.getValue();
 				writer.write(frequency.getKey() + ", " + frequency.getValue());
 				writer.write("\n");
-				writer.write("##Word Count: " + wordCount);
 			}
+			writer.write("##Word Count: " + wordCount);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
 			try {
-				writer.close();
+				if(writer != null)
+					writer.close();
 
 			} catch (Exception e) {
 				e.printStackTrace();
-
-				if (writer != null) {
-					try {
-						writer.close();
-
-					} catch (Exception e1) {
-						e1.printStackTrace();
-
-					}
-
-				}
 
 			}
 		}
@@ -359,6 +369,11 @@ public class Crawler extends WebCrawler {
 	///////////////////////////////////////////
 	// CRAWLED DATA METHODS
 	///////////////////////////////////////////
+
+	/**
+	 * This method writes a record of each webpage visted to the crawledData directory.
+	 * @param parseData The object from the crawler that contains raw and parsed html data
+     */
 	private static void savePageDataToDatabase(HtmlParseData parseData){
 		String text = parseData.getText();
 		String html = parseData.getHtml();
@@ -394,6 +409,9 @@ public class Crawler extends WebCrawler {
 	///////////////////////////////////////////
 	// SUBDOMAIN COMPARATOR
 	///////////////////////////////////////////
+	/**
+	 * This comparator is used to sort the Subdomains file.
+	 */
 	private static Comparator<String> SubdomainComparator = new Comparator<String>() {
 		@Override
 		public int compare(String sd1, String sd2) {
