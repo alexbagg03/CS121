@@ -121,8 +121,7 @@ public class Crawler extends WebCrawler {
 			else if (wordCount > longestPage.wordCount) {
 				longestPage = new PageWordCountPair(page, wordCount);
 			}
-
-			Set<WebURL> links = htmlParseData.getOutgoingUrls();
+			
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
