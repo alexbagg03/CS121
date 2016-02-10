@@ -21,12 +21,12 @@ public class Controller {
     ///////////////////////////////////////////
     // MEMBERS
     ///////////////////////////////////////////
-    private static final String crawlStorageFolder = "../Assignment2/data/crawl/root";
-    private static final int numberOfCrawlers = 7;
-    private static final int politenessDelay = 600; // in milliseconds
-    private static final int maxPagesToFetch = 4;
+    private static final String crawlStorageFolder = "Assignment2/data/crawl/root";
+    private static final int numberOfCrawlers = 1;
+    private static final int politenessDelay = 3000; // in milliseconds
+    private static final int maxPagesToFetch = 10000;
     private static CrawlController crawlController;
-    private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502 71785156 93309744";
+    private static final String userAgentString = "UCI Inf141-CS121 crawler 80332851 19367502 93309744 71785156";
 
 
     ///////////////////////////////////////////
@@ -48,7 +48,7 @@ public class Controller {
         config.setUserAgentString(userAgentString);
         //TODO remove when done testing
         config.setMaxPagesToFetch(maxPagesToFetch);
-        config.setResumableCrawling(false);
+        config.setResumableCrawling(true);
 
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
