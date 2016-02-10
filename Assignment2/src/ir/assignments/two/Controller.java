@@ -46,7 +46,6 @@ public class Controller {
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setPolitenessDelay(politenessDelay);
         config.setUserAgentString(userAgentString);
-        //TODO remove when done testing
         config.setMaxPagesToFetch(maxPagesToFetch);
         config.setResumableCrawling(true);
 
