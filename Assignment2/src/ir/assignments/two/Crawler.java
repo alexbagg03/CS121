@@ -121,7 +121,7 @@ public class Crawler extends WebCrawler {
 			else if (wordCount > longestPage.wordCount) {
 				longestPage = new PageWordCountPair(page, wordCount);
 			}
-			
+
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
@@ -338,7 +338,7 @@ public class Crawler extends WebCrawler {
 		PrintWriter writer = null;
 		try	{
 			writer = new PrintWriter(new FileWriter(wordDir + urlString + "TEXT.txt", true));
-			writer.write(url);
+			writer.write(url + ", " + idCounter);
 			writer.write("\n");
 			for (Map.Entry<String, Integer> frequency : wordFrequencies.entrySet()) {
 				wordCount += frequency.getValue();
