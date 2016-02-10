@@ -3,6 +3,6 @@ Put your answers to the questions here, on in a similarly named .doc or .pdf fil
 
 1)The domain took approximately 12 hours to crawl before the crawler finished. We had to reset the crawler several times.
 
-2)We crawled 67 subdomains and got 3751 unique pages before the Crawler's frontier was empty.
+2)We crawled 67 subdomains and found 3751 unique pages before the Crawler's frontier was empty.
 
 4) The longest page in terms of number of words is http://www.ics.uci.edu/~gbowker/classification/ and it has 35228 words.
