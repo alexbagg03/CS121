@@ -122,6 +122,7 @@ public class Crawler extends WebCrawler {
 				longestPage = new PageWordCountPair(page, wordCount);
 			}
 
+			Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
 			System.out.println("Text length: " + text.length());
 			System.out.println("Html length: " + html.length());
@@ -150,7 +151,6 @@ public class Crawler extends WebCrawler {
 		crawl(icsDomain);
 		sortSubdomainFile();
 		Controller.stop();
-
 	}
 
 
@@ -220,7 +220,7 @@ public class Crawler extends WebCrawler {
 		ArrayList<String> subdomainList = new ArrayList<String>();
 
 		try {
-			fileReader = new FileReader(subdomainFile);
+			fileReader = new FileReader(subdomainFileName);
 
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
