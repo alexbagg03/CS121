@@ -1,7 +1,8 @@
+//Alex Bagg (80332851) Nick Prendergast (19367502) Vonnie Wu (71785156) Aaron Lai (93309744)
 Put your answers to the questions here, on in a similarly named .doc or .pdf file.
 
-1)
+1)The domain took approximately 12 hours to crawl before the crawler finished. We had to reset the crawler several times.
 
-2)
+2)We crawled 67 subdomains and got 3751 unique pages before the Crawler's frontier was empty.
 
 4) The longest page in terms of number of words is http://www.ics.uci.edu/~gbowker/classification/ and it has 35228 words.
