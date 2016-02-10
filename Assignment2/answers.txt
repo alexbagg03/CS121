@@ -1,1 +1,7 @@
 Put your answers to the questions here, on in a similarly named .doc or .pdf file.
+
+1)
+
+2)
+
+4) The longest page in terms of number of words is http://www.ics.uci.edu/~gbowker/classification/ and it has 35228 words.
